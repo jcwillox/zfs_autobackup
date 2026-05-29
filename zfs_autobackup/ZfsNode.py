@@ -21,7 +21,7 @@ class ZfsNode(ExecuteNode):
 
     def __init__(self, logger, utc=False, snapshot_time_format="", hold_name="", ssh_config=None, ssh_to=None, readonly=False,
                  description="",
-                 debug_output=False, thinner=None, exclude_snapshot_patterns=[]):
+                 debug_output=False, thinner=None, exclude_snapshot_patterns=[], limit_datasets=[]):
 
         self.utc = utc
         self.snapshot_time_format = snapshot_time_format
@@ -50,6 +50,7 @@ class ZfsNode(ExecuteNode):
                 self.verbose("Keep no old snaphots")
 
         self.__thinner = thinner
+        self.limit_datasets = limit_datasets
 
         # list of ZfsPools
         self.__pools = {}
@@ -249,10 +250,16 @@ class ZfsNode(ExecuteNode):
         self.debug("Getting selected datasets")
 
         # get all source filesystems that have the backup property
-        lines = self.run(tab_split=True, readonly=True, cmd=[
+        cmd = [
             "zfs", "get", "-t", "volume,filesystem", "-Hp",
             property_name + ",createtxg"
-        ])
+        ]
+
+        if self.limit_datasets:
+            cmd.append("-r")
+            cmd.extend(self.limit_datasets)
+
+        lines = self.run(tab_split=True, readonly=True, cmd=cmd)
 
 
         # The returnlist of selected ZfsDataset's:

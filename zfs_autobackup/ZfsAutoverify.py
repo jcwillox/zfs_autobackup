@@ -236,7 +236,8 @@ class ZfsAutoverify(ZfsAuto):
                                   ssh_config=self.args.ssh_config,
                                   ssh_to=self.args.ssh_source, readonly=self.args.test,
                                   debug_output=self.args.debug_output, description=description,
-                                  exclude_snapshot_patterns=self.args.exclude_snapshot_pattern)
+                                  exclude_snapshot_patterns=self.args.exclude_snapshot_pattern,
+                                  limit_datasets=self.args.source)
 
             ################# select source datasets
             self.set_title("Selecting")

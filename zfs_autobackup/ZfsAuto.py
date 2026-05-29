@@ -103,6 +103,8 @@ class ZfsAuto(CliBase):
                            help='Number of directories to strip from target path.')
 
         group=parser.add_argument_group("Selection options")
+        group.add_argument('--source', metavar='POOL/DATASET', action='append', default=[],
+                           help='Only scan these source pools or datasets (can be used multiple times)')
         group.add_argument('--ignore-replicated', action='store_true', help=argparse.SUPPRESS)
         group.add_argument('--exclude-unchanged', metavar='BYTES', default=0, type=int,
                             help='Exclude datasets that have less than BYTES data changed since any last snapshot. (Use with proxmox HA replication)')
