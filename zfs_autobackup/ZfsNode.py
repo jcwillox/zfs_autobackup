@@ -52,6 +52,9 @@ class ZfsNode(ExecuteNode):
         self.__thinner = thinner
         self.limit_datasets = limit_datasets
 
+        if limit_datasets:
+            self.verbose("Restricted to source(s): {}".format(", ".join(limit_datasets)))
+
         # list of ZfsPools
         self.__pools = {}
         self.__datasets = {}
